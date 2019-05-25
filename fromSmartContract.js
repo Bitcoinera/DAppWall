@@ -33,14 +33,13 @@ const DappWallABI = [
 		"type": "event"
 	}
 ];
-const DappWallContract = new web3.eth.Contract(DappWallABI, '0x0dcd2f752394c41875e259e00bb44fd505297caf');
+const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
 
 function SmartContractGet() {
 	DappWallContract.getPastEvents('listIP', {
-		fromBlock: 4444785, 	//meter el bloque donde se despliega el contrato
+		fromBlock: 0, 	//meter el bloque donde se despliega el contrato
 		toBlock: 'latest'
 	}, (error, events) => {
-		//console.log(DappWallABI);
 		console.log(events);
 	})
 }

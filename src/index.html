@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" media="screen" href="styles.css" />
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/gh/ethereum/web3.js@1.0.0-beta.34/dist/web3.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -57,9 +58,7 @@
                     // locked. update UI. Ask user to unlock.
                     console.log('Your account is locked');
                 }
-            }
 
-            if (web3) {
                 switch (web3.version.network) {
                     case '1':
                         console.log('This is mainnet');
@@ -86,6 +85,43 @@
                     // ask user to switch to desired network
                     console.log('Please switch to Rinkeby network.');
                 }
+
+                const DappWallABI = [
+                    {
+                        "constant": false,
+                        "inputs": [
+                            {
+                                "name": "_swarmHashList",
+                                "type": "bytes32"
+                            }
+                        ],
+                        "name": "update",
+                        "outputs": [],
+                        "payable": true,
+                        "stateMutability": "payable",
+                        "type": "function"
+                    },
+                    {
+                        "anonymous": false,
+                        "inputs": [
+                            {
+                                "indexed": true,
+                                "name": "_from",
+                                "type": "address"
+                            },
+                            {
+                                "indexed": true,
+                                "name": "_swarmHashList",
+                                "type": "bytes32"
+                            }
+                        ],
+                        "name": "listIP",
+                        "type": "event"
+                    }
+                ];
+                const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
+
+                window.contract = DappWallContract;
             }
         })
     </script>

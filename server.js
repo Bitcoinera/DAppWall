@@ -16,7 +16,8 @@ app.post('/', (req, res) => {
     let id = req.body.id;
     let ip = req.body.ip;
     let form = {
-        id: ip
+        id: id,
+        ip: ip
     };
     let formData = querystring.stringify(form);
     let hash;

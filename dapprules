@@ -1,0 +1,37 @@
+#!/bin/bash
+
+# Pregunta por 2 valores, los sube a swarm y devuelve el hash
+echo "What IP would you like to add?"
+read -r dataip
+
+echo "What ID would you like to add"
+read -r dataid
+
+
+      echo "$dataip ; $dataid"
+      myhash=`curl -s -X POST \
+      http://swarm.dappnode/bzz:/ \
+      -H 'Cache-Control: no-cache' \
+      -H 'Content-Type: text/plain' \
+      -d ''${dataip}' ; '${dataid}''`
+      echo "$myhash"
+
+
+mylist=$(curl -s -X GET http://swarm.dappnode/bzz:/${myhash}/ -H 'Cache-Control: no-cache'  -H 'Content-Type: text/plain')
+
+echo "mylist is: ${mylist}"
+
+exit 0
+
+
+
+cat "$DAppWallList" \
+ | sed -e 's/;.*//' \
+ | grep -v '^ *$' \
+ | while read OneNetBlock ; do
+# echo "$OneNetBlock"
+#	/sbin/iptables -I INPUT -s "$OneNetBlock" -j DROP
+#	/sbin/iptables -I OUTPUT -d "$OneNetBlock" -j DROP
+#	/sbin/iptables -I FORWARD -s "$OneNetBlock" -j DROP
+#	/sbin/iptables -I FORWARD -d "$OneNetBlock" -j DROP
+done

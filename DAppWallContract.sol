@@ -1,9 +1,9 @@
 pragma solidity ^0.5.1;
 
 contract DappWall {
-    event addIP(
+    event listIP(
         address indexed _from,
-        bytes32 indexed _swarmHashList,
+        bytes32 indexed _swarmHashList
     );
 
     function update(bytes32 _swarmHashList) public payable{
@@ -12,6 +12,6 @@ contract DappWall {
         // (if any) in parentheses. Any such invocation
         // (even deeply nested) can be detected from
         // the JavaScript API by filtering for 'Deposit'
-        emit addIP(msg.sender, _swarmHashList);
+        emit listIP(msg.sender, _swarmHashList);
     }
 }

@@ -8,6 +8,7 @@
   <h2> ¿Qué hace? </h2>
   
 <p>
+  
 * DAppWall es una DApp para DAppNode que permite crear listas de nodos. Con un proceso de governanza se determina si un nodo (su ip o su id) pasa a formar parte de una <i>blacklist</i> o <i>whitelist</i>. En función de esa lista, DAppWall genera el firewall, al que hemos llamado DAppWall. 
 
 * DAppWall utiliza una sistema de gobernanza mediante una DAO en Aragon (pudiendo verificar su identidad con uPort) en el cual, la comunidad decidirá quién entra en la lista negra o blanca. En otras palabras, cada nodo decide qué nodos van en su lista negra o blanca. Estos nodos luego compartirán sus listas para ponerlos en la lista principal, la cual DAppWall usará para construir el DAppWall. 

@@ -12,6 +12,36 @@ app.get('/', (req, res) => {
     res.render('src/index.html');
 })
 
+app.get('/:hash/:id/:ip', (req, res) => {
+    console.log(req.params.hash);
+    let hash = req.params.hash;
+    let id = req.params.id;
+    let ip = req.params.ip;
+    request(
+        {
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Content-Type': 'application/json'
+            },
+            uri: `http://swarm.protocol-bt.ml/bzz:/${hash}`,
+            method: 'GET'
+          }, function (error, response, body) {
+            if (!error) {
+                console.log(response.body);
+                response.body = [];
+                let newBody = {
+                    id: id,
+                    ip, ip
+                }
+                response.body.push(querystring.stringify(newBody));
+                res.json(response.body);
+            }
+            else {
+                console.log("An error occured");
+            }
+        })
+})
+
 app.post('/', (req, res) => {
     let id = req.body.id;
     let ip = req.body.ip;
@@ -28,13 +58,13 @@ app.post('/', (req, res) => {
           'Cache-Control': 'no-cache',
           'Content-Type': 'application/x-www-form-urlencoded'
         },
-        uri: 'http://swarm.dappnode/bzz:/',
+        uri: 'http://swarm.protocol-bt.ml/bzz:/',
         body: formData,
         method: 'POST'
       }, function (error, response, body) {
         if (!error) {  
             hash = body;
-            res.send(`<h2>Your hash is: </h2><span>${hash}</span>`);
+            res.redirect(`/${hash}/${id}/${ip}`);
         }
         else {
             console.log("An error occured");

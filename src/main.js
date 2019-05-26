@@ -3,6 +3,7 @@ let form = document.getElementById('ip-form');
 let ip = document.getElementById('ip');
 let id = document.getElementById('id');
 let contractEvents;
+let swarmHash;
 let swarmHashList;
 
 form.addEventListener('submit', async (e) => {
@@ -34,33 +35,36 @@ form.addEventListener('submit', async (e) => {
             ip: ip.value
         }
 
-        formData = JSON.stringify(formData);
-        console.log(formData);
-
         // POST to Swarm with fetch
-        fetch("http://swarm.protocol-bt.ml/bzz:/", {
+        fetch("https://swarm-gateways.net/bzz:/", {
             headers: {
               'Accept': 'application/json',
               'Content-Type': 'application/json'
             },
-            mode: "no-cors",
             method: "POST",
-            body: formData
-          })
-          .then((res) => console.log(res))
-          .catch(res => console.log(res));
-
-        // GET from Swarm with fetch
-        fetch(`http://swarm.protocol-bt.ml/bzz:/${swarmHashList}`, {
-            headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-            },
-            mode: "no-cors",
-            method: "POST",
+            body: JSON.stringify(formData)
         })
-        .then((res) => console.log(res))
-        .catch(res => console.log(res));
+        .then(res => res.text())
+        .then(data => {
+            console.log(data);
+            swarmHash = data;
+
+            // GET from Swarm with fetch
+            //http://swarm.protocol-bt.ml/bzz:/
+            fetch(`https://swarm-gateways.net/bzz:/${swarmHash}`, {
+                headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+                },
+                method: "GET",
+            })
+            .then( res => res.text())
+            .then( data => console.log(data))
+            .catch( err => console.log(err));
+        })
+        .catch(err => console.log({err}));
+
+
 
         // contract.methods.update(swarmHashList).send({from: '0x0dcd2f752394c41875e259e00bb44fd505297caf'}, (error, transactionHash) => {
         //     console.log(transactionHash);

@@ -3,38 +3,42 @@
 </p>
 <h2> Inspiración </h2>
 
-<p>Crear una red segura en DAppNode</p>
+<p>Crear una red más segura con DAppNode</p>
 
-  <h2> ¿Que hace? </h2>
+  <h2> ¿Qué hace? </h2>
   
 <p>
-La funcionalidad basica de DAppWall es crear un sistema centralizado de acceso , donde se registrara en una red inmutable de nodos pertenecientes a DAppNode 
+* DAppWall es una DApp para DAppNode que permite crear listas de nodos. Con un proceso de governanza se determina si un nodo (su ip o su id) pasa a formar parte de una *blacklist/whitelist*. En función de esa lista, DAppWall genera su firewall. 
 
-DAppWall seguira una sistema de gobernanza social donde la comunidad elijira quien entra en la lista negra o no , en otras palabras , cada nodo decide que nodos van en su lista negra estos nodos luego compartiran sus listas para ponerlos en la lista principal , la cual DAppWall usara para el firewall. 
+* DAppWall utiliza una sistema de gobernanza mediante una DAO en Aragon (pudiendo verificar su identidad con Uport) en el cual, la comunidad decidirá quien entra en la lista negra o blanca. En otras palabras, cada nodo decide que nodos van en su lista negra o blanca, estos nodos luego compartirán sus listas para ponerlos en la lista principal, la cual DAppWall usará para construir firewall. 
+
+* Permite crear una lista de nodos federados o una red de confianza.
+
+* También permite crear una estructura de protección para nodos que lo necesiten, ocultando así los nodos más sensibles.
 </p>
 
 
 <summary>
-  <b> Como lo hemos construido </b>
+  <b> ¿Cómo lo hemos construido? </b>
 </summary>
 <details>
 <p>
- Nuestro objetico es construir el front end con react , el back end con ip tables (smartcontracts) y por ultimo connectarlo a DAppNode , siendo parte de un Aragon DAO.
+ Nuestro objetivo es construir el front-end con HTML5 y Bootstrap, el back-end con IP-tables (gobernado por un smartContract).
 </p>
 </details>
 <summary>
-  <b> Piedras por el camino </b>
+  <b> Obstáculos encontrados </b>
 </summary>
 <details>
 <p>
-Crear el DAO a resultado más complejo de lo pensado previamente , escribir los contractos tambien a nos ha causado problemas debido a la complejidad de las reglas elejidas.
+Crear la DAO ha sido lo más complejo, escribir los contractos también a nos ha causado problemas debido a la complejidad de las reglas elejidas.
  </p>
 </details>
 <summary>
-  <b> ¿Que hemos aprendido? </b>
+  <b> ¿Qué hemos aprendido? </b>
 </summary>
 <details>
 <p>
-Como usar Aragon y como mandar paquetes a DAppNode
+Como usar Aragon y crear una DApp para DAppnode con su sdk
 </p>
 </details>

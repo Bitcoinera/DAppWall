@@ -21,8 +21,8 @@ DAppWall will follow a system of social acceptance where the community will deci
 </summary>
 <details>
 <p>
-The objective it is to build it with react for the front end , for back end we will use the ip tables , a smart-contract.
-We will also bundle our DApp to be able to work with DAppNode , and it will be an Aragon DAO.
+The objective it is to build it with react for the front end, for back end we will use the ip tables, a smart-contract and Swarm.
+We will also bundle our DApp to be able to work with DAppNode, and it will be an Uport ID to sign and Aragon DAO to vote.
 </p>
 </details>
 <summary>
@@ -30,7 +30,7 @@ We will also bundle our DApp to be able to work with DAppNode , and it will be a
 </summary>
 <details>
 <p>
-Creating the DAO has been really the main issue setting up the smart-contracts has caused us problems too due to the complexity of the rules we were trying to set up.
+Conect Metamask, the Smart Contract, Swarm and DAppNode has been really the main issue setting up due to the complexity of the rules we are trying to set up. Aragon and Uport we will connect it in the future to complete the governance.
  </p>
 </details>
 <summary>
@@ -38,6 +38,6 @@ Creating the DAO has been really the main issue setting up the smart-contracts h
 </summary>
 <details>
 <p>
-Learning about Aragon and all its process and sending packages to the DAppNode. 
+We learn about Web3, DappNode, Uport, Aragon and all its process and sending packages to the DAppNode. 
 </p>
 </details>

@@ -8,11 +8,11 @@
   <h2> ¿Qué hace? </h2>
   
 <p>
-* DAppWall es una DApp para DAppNode que permite crear listas de nodos. Con un proceso de governanza se determina si un nodo (su ip o su id) pasa a formar parte de una *blacklist/whitelist*. En función de esa lista, DAppWall genera su firewall. 
+* DAppWall es una DApp para DAppNode que permite crear listas de nodos. Con un proceso de governanza se determina si un nodo (su ip o su id) pasa a formar parte de una <i>blacklist</i> o <i>whitelist</i>. En función de esa lista, DAppWall genera el firewall, al que hemos llamado DAppWall. 
 
-* DAppWall utiliza una sistema de gobernanza mediante una DAO en Aragon (pudiendo verificar su identidad con Uport) en el cual, la comunidad decidirá quien entra en la lista negra o blanca. En otras palabras, cada nodo decide que nodos van en su lista negra o blanca, estos nodos luego compartirán sus listas para ponerlos en la lista principal, la cual DAppWall usará para construir firewall. 
+* DAppWall utiliza una sistema de gobernanza mediante una DAO en Aragon (pudiendo verificar su identidad con uPort) en el cual, la comunidad decidirá quién entra en la lista negra o blanca. En otras palabras, cada nodo decide qué nodos van en su lista negra o blanca. Estos nodos luego compartirán sus listas para ponerlos en la lista principal, la cual DAppWall usará para construir el DAppWall. 
 
-* Permite crear una lista de nodos federados o una red de confianza.
+* Permite crear una lista de nodos federados o red de confianza.
 
 * También permite crear una estructura de protección para nodos que lo necesiten, ocultando así los nodos más sensibles.
 </p>
@@ -23,7 +23,7 @@
 </summary>
 <details>
 <p>
- Nuestro objetivo es construir el front-end con HTML5 y Bootstrap, el back-end con IP-tables (gobernado por un smartContract).
+ Nuestro objetivo es construir el frontend con HTML5 y Bootstrap, aunque la idea será usar React en le futuro próximo. El backend con iptables (gobernado por un smartcontract).
 </p>
 </details>
 <summary>
@@ -39,6 +39,8 @@ Crear la DAO ha sido lo más complejo, escribir los contractos también a nos ha
 </summary>
 <details>
 <p>
-Como usar Aragon y crear una DApp para DAppnode con su sdk
+Conectar Metamask (web3) a nuestro frontend.
+Interactuar con smart contract desde Nodejs.
+Cómo usar Aragon y crear una DApp para DAppnode con su SDK.
 </p>
 </details>

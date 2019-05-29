@@ -39,7 +39,7 @@ window.addEventListener('load', () => {
                 // GET IP List from Swarm
                 fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
                     headers: headers,
-                    method: "GET",
+                    method: 'GET',
                 })
                 .then( res => res.text())
                 .then( data => {
@@ -55,9 +55,9 @@ window.addEventListener('load', () => {
                     console.log('This is the current ip list', IPList);
                     
                     // POST IP list to Swarm
-                    fetch("https://swarm-gateways.net/bzz:/", {
+                    fetch('https://swarm-gateways.net/bzz:/', {
                         headers: headers,
-                        method: "POST",
+                        method: 'POST',
                         body: JSON.stringify(IPList)
                     })
                     .then( res => res.text())
@@ -75,11 +75,17 @@ window.addEventListener('load', () => {
                         // GET from Swarm with fetch
                         fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
                             headers: headers,
-                            method: "GET",
+                            method: 'GET',
                         })
                         .then( res => res.text())
                         .then( data => {
                             console.log('IP list in Swarm AFTER POST', data);
+                            // send current iplist after post to node, to update iptables
+                            fetch('http://localhost:3000', {
+                                headers: headers,
+                                method: 'POST',
+                                body: data
+                            })
                         })
                         .catch( err => console.log(err));
         

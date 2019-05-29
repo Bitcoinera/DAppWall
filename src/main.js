@@ -15,78 +15,8 @@ let headers = {
 }
 
 window.addEventListener('load', () => {
-    // Set up web3 in...
-    // Modern dapp browsers...
-   if (window.ethereum) {
-       window.web3 = new Web3(ethereum);
-       try {
-           // Request account access if needed
-           ethereum.enable();
-           // Acccounts now exposed
-           web3.eth.sendTransaction({/* ... */});
-       } catch (error) {
-           // User denied account access...
-       }
-   }
-   // Legacy dapp browsers...
-   else if (window.web3) {
-       window.web3 = new Web3(web3.currentProvider);
-       // Acccounts always exposed
-       web3.eth.sendTransaction({/* ... */});
-       console.log(web3.currentProvider);
-   }
-   // Non-dapp browsers...
-   else {
-       console.log('Non-Ethereum browser detected. You should consider trying MetaMask!');
-   }
 
-   if (web3) {
-        if (web3.eth.accounts.length) {
-            // if not locked, get account
-            const account = web3.eth.accounts[0];
-            // updates UI, state, pull data
-        } else {
-            // locked. update UI. Ask user to unlock.
-            console.log('Your account is locked');
-        }
-
-        switch (web3.version.network) {
-            case '1':
-                console.log('This is mainnet');
-                break;
-            case '2':
-                console.log('This is the deprecated Morden test network.');
-                break;
-            case '3':
-                console.log('This is the ropsten test network.');
-                break;
-            case '4':
-                console.log('This is the Rinkeby test network.');
-                break;
-            case '42':
-                console.log('This is the Kovan test network.');
-                break;
-            default:
-                console.log('This is an unknown network.');
-                break;
-        }
-
-        const desiredNetwork = '4';
-        if (web3.version.network !== desiredNetwork) {
-            // ask user to switch to desired network
-            console.log('Please switch to Rinkeby network.');
-        }
-        
-        // get user's account
-        web3.eth.getAccounts((error,result) => {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(result);
-                accounts = result;
-            }       
-        });
-        console.log('accounts', accounts);
+    if(window.web3) {
 
         // get smart contract
         const DappWallContract = new web3.eth.Contract(window.dappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
@@ -160,6 +90,5 @@ window.addEventListener('load', () => {
             })
         });
 
-  
     }
 })

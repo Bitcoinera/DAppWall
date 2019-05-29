@@ -37,152 +37,105 @@ window.addEventListener('load', () => {
    }
 
    if (web3) {
-       if (web3.eth.accounts.length) {
-           // if not locked, get account
-           const account = web3.eth.accounts[0];
-           // updates UI, state, pull data
-       } else {
-           // locked. update UI. Ask user to unlock.
-           console.log('Your account is locked');
-       }
-
-    switch (web3.version.network) {
-        case '1':
-            console.log('This is mainnet');
-            break;
-        case '2':
-            console.log('This is the deprecated Morden test network.');
-            break;
-        case '3':
-            console.log('This is the ropsten test network.');
-            break;
-        case '4':
-            console.log('This is the Rinkeby test network.');
-            break;
-        case '42':
-            console.log('This is the Kovan test network.');
-            break;
-        default:
-            console.log('This is an unknown network.');
-            break;
-    }
-
-    const desiredNetwork = '4';
-    if (web3.version.network !== desiredNetwork) {
-        // ask user to switch to desired network
-        console.log('Please switch to Rinkeby network.');
-    }
-    
-    // get user's account
-    web3.eth.getAccounts((error,result) => {
-        if (error) {
-            console.log(error);
+        if (web3.eth.accounts.length) {
+            // if not locked, get account
+            const account = web3.eth.accounts[0];
+            // updates UI, state, pull data
         } else {
-            console.log(result);
-            accounts = result;
-        }       
-    });
-    console.log('accounts', accounts);
-
-    // get smart contract
-    const DappWallABI = [
-        {
-            "constant": false,
-            "inputs": [
-                {
-                    "name": "_swarmHashList",
-                    "type": "bytes32"
-                }
-            ],
-            "name": "update",
-            "outputs": [],
-            "payable": true,
-            "stateMutability": "payable",
-            "type": "function"
-        },
-        {
-            "anonymous": false,
-            "inputs": [
-                {
-                    "indexed": true,
-                    "name": "_from",
-                    "type": "address"
-                },
-                {
-                    "indexed": true,
-                    "name": "_swarmHashList",
-                    "type": "bytes32"
-                }
-            ],
-            "name": "listIP",
-            "type": "event"
+            // locked. update UI. Ask user to unlock.
+            console.log('Your account is locked');
         }
-    ];
-    const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
 
-    // the real thing
-    form.addEventListener('submit', async (e) => {
-        e.preventDefault();
+        switch (web3.version.network) {
+            case '1':
+                console.log('This is mainnet');
+                break;
+            case '2':
+                console.log('This is the deprecated Morden test network.');
+                break;
+            case '3':
+                console.log('This is the ropsten test network.');
+                break;
+            case '4':
+                console.log('This is the Rinkeby test network.');
+                break;
+            case '42':
+                console.log('This is the Kovan test network.');
+                break;
+            default:
+                console.log('This is an unknown network.');
+                break;
+        }
 
-        // events = SmartContractGet(DappWallContract)
-        DappWallContract.getPastEvents('listIP', {
-            fromBlock: 4445524, 	//meter el bloque donde se despliega el contrato
-            toBlock: 'latest'
-        }, (error, events) => {
-            for ( let i = 0; i < events.length; i++ ) {
-                console.log('Past events from smart contract', events[i].returnValues);
-            }
-            contractEvents = events[events.length - 1].returnValues;
-            swarmHash = contractEvents['_swarmHashList'];
-            // swarmHashList.push(swarmHashList.slice(2, swarmHashList.length));
-        })
+        const desiredNetwork = '4';
+        if (web3.version.network !== desiredNetwork) {
+            // ask user to switch to desired network
+            console.log('Please switch to Rinkeby network.');
+        }
         
-        formData = {
-            id: id.value,
-            ip: ip.value
-        }
+        // get user's account
+        web3.eth.getAccounts((error,result) => {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log(result);
+                accounts = result;
+            }       
+        });
+        console.log('accounts', accounts);
 
-        IPList.push(formData);
-        console.log('This is the current ip list', IPList);
-
-        // POST to Swarm with fetch
-        fetch("https://swarm-gateways.net/bzz:/", {
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+        // get smart contract
+        const DappWallABI = [
+            {
+                "constant": false,
+                "inputs": [
+                    {
+                        "name": "_swarmHashList",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "update",
+                "outputs": [],
+                "payable": true,
+                "stateMutability": "payable",
+                "type": "function"
             },
-            method: "POST",
-            body: JSON.stringify(formData)
-        })
-        .then(res => res.text())
-        .then(data => {
-            console.log('Swarm hash after post', data);
-            swarmHash = data;
+            {
+                "anonymous": false,
+                "inputs": [
+                    {
+                        "indexed": true,
+                        "name": "_from",
+                        "type": "address"
+                    },
+                    {
+                        "indexed": true,
+                        "name": "_swarmHashList",
+                        "type": "bytes32"
+                    }
+                ],
+                "name": "listIP",
+                "type": "event"
+            }
+        ];
+        const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
 
-            // POST IP list to Swarm
-            fetch("https://swarm-gateways.net/bzz:/", {
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                method: "POST",
-                body: JSON.stringify(IPList)
-            })
-            .then( res => res.text())
-            .then( data => {
-                console.log('Swarm hash for the IP list', data);
+        // the real thing
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-                swarmHashList = data;
+            // First of all, call smart contract and get the current IP list from Swarm
+            DappWallContract.getPastEvents('listIP', {
+                fromBlock: 4445524, 	//meter el bloque donde se despliega el contrato
+                toBlock: 'latest'
+            }, (error, events) => {
+                
+                contractEvents = events[events.length - 1].returnValues;
+                swarmHash = contractEvents['_swarmHashList'];
+                swarmHashList = swarmHash.slice(2, swarmHash.length);
+                console.log('current swarmHashList is', swarmHashList);
 
-                // POST SwarmHashList to smart DappWallContract
-                DappWallContract.methods.update('0x' + swarmHashList).send({from: accounts[0]}, (error, transactionHash) => {
-                    console.log(transactionHash);
-                    return transactionHash
-                });
-
-                 // This is ONLY FOR CHECKING PURPOSES
-                // GET from Swarm with fetch
-                // http://swarm.protocol-bt.ml/bzz:/
+                // GET IP List from Swarm
                 fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
                     headers: {
                     'Accept': 'application/json',
@@ -193,14 +146,74 @@ window.addEventListener('load', () => {
                 .then( res => res.text())
                 .then( data => {
                     console.log('IP list in Swarm', data);
+                    IPList = JSON.parse(data);
+
+                    formData = {
+                        id: id.value,
+                        ip: ip.value
+                    }
+                    
+                    IPList.push(formData);
+                    console.log('This is the current ip list', IPList);
                 })
                 .catch( err => console.log(err));
-
+        
+                // POST to Swarm with fetch
+                fetch("https://swarm-gateways.net/bzz:/", {
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    method: "POST",
+                    body: JSON.stringify(formData)
+                })
+                .then(res => res.text())
+                .then(data => {
+                    console.log('Swarm hash after post', data);
+                    swarmHash = data;
+        
+                    // POST IP list to Swarm
+                    fetch("https://swarm-gateways.net/bzz:/", {
+                        headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        method: "POST",
+                        body: JSON.stringify(IPList)
+                    })
+                    .then( res => res.text())
+                    .then( data => {
+                        console.log('Swarm hash for the IP list AFTER POST', data);
+        
+                        swarmHashList = data;
+        
+                        // POST SwarmHashList to smart DappWallContract
+                        DappWallContract.methods.update('0x' + swarmHashList).send({from: accounts[0]}, (error, transactionHash) => {
+                            console.log(transactionHash);
+                            return transactionHash
+                        });
+        
+                        // This is ONLY FOR CHECKING PURPOSES
+                        // GET from Swarm with fetch
+                        // http://swarm.protocol-bt.ml/bzz:/
+                        fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
+                            headers: {
+                            'Accept': 'application/json',
+                            'Content-Type': 'application/json'
+                            },
+                            method: "GET",
+                        })
+                        .then( res => res.text())
+                        .then( data => {
+                            console.log('IP list in Swarm AFTER POST', data);
+                        })
+                        .catch( err => console.log(err));
+        
+                    })
+                    .catch( err => console.log(err));
+        
+                })
             })
-            .catch( err => console.log(err));
-
-        })
-
-    });
+        });
     }
 })

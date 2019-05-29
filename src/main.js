@@ -6,12 +6,9 @@ let cleanButton = document.getElementById('clean');
 let contractEvents;
 let swarmHash;
 let swarmHashList;
+let IPList = [];
 let formData;
 let accounts;
-
-this.state = {
-    hashList: []
-}
 
 window.addEventListener('load', () => {
     // Set up web3 in...
@@ -123,33 +120,31 @@ window.addEventListener('load', () => {
     ];
     const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
 
-    // clean local storage event
-    cleanButton.addEventListener('click', () => {
-        localStorage.clear();
-        console.log('Local storage cleared');
-    })
-
     // the real thing
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
 
         // events = SmartContractGet(DappWallContract)
         DappWallContract.getPastEvents('listIP', {
-            fromBlock: 0, 	//meter el bloque donde se despliega el contrato
+            fromBlock: 4445524, 	//meter el bloque donde se despliega el contrato
             toBlock: 'latest'
         }, (error, events) => {
-            console.log('Past events from smart contract', events[0].returnValues);
-            contractEvents = events[0].returnValues;
-            swarmHashList = contractEvents['_swarmHashList'];
-            swarmHashList = swarmHashList.slice(2, swarmHashList.length);
-
-            formData = {
-                id: id.value,
-                ip: ip.value
+            for ( let i = 0; i < events.length; i++ ) {
+                console.log('Past events from smart contract', events[i].returnValues);
             }
-
+            contractEvents = events[events.length - 1].returnValues;
+            swarmHash = contractEvents['_swarmHashList'];
+            // swarmHashList.push(swarmHashList.slice(2, swarmHashList.length));
         })
         
+        formData = {
+            id: id.value,
+            ip: ip.value
+        }
+
+        IPList.push(formData);
+        console.log('This is the current ip list', IPList);
+
         // POST to Swarm with fetch
         fetch("https://swarm-gateways.net/bzz:/", {
             headers: {
@@ -163,69 +158,48 @@ window.addEventListener('load', () => {
         .then(data => {
             console.log('Swarm hash after post', data);
             swarmHash = data;
-            this.state.hashList.push('0x' + swarmHash);
-            localStorage.setItem('pair', this.state.hashList);
-            console.log(localStorage);
 
-            // GET from Swarm with fetch
-            // http://swarm.protocol-bt.ml/bzz:/
-            fetch(`https://swarm-gateways.net/bzz:/${swarmHash}`, {
+            // POST IP list to Swarm
+            fetch("https://swarm-gateways.net/bzz:/", {
                 headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
                 },
-                method: "GET",
+                method: "POST",
+                body: JSON.stringify(IPList)
             })
             .then( res => res.text())
-            .then( data => console.log('Data from Swarm GET', data))
+            .then( data => {
+                console.log('Swarm hash for the IP list', data);
+
+                swarmHashList = data;
+
+                // POST SwarmHashList to smart DappWallContract
+                DappWallContract.methods.update('0x' + swarmHashList).send({from: accounts[0]}, (error, transactionHash) => {
+                    console.log(transactionHash);
+                    return transactionHash
+                });
+
+                 // This is ONLY FOR CHECKING PURPOSES
+                // GET from Swarm with fetch
+                // http://swarm.protocol-bt.ml/bzz:/
+                fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
+                    headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json'
+                    },
+                    method: "GET",
+                })
+                .then( res => res.text())
+                .then( data => {
+                    console.log('IP list in Swarm', data);
+                })
+                .catch( err => console.log(err));
+
+            })
             .catch( err => console.log(err));
 
-            // POST to smart DappWallContract
-            DappWallContract.methods.update('0x' + swarmHash).send({from: accounts[0]}, (error, transactionHash) => {
-                console.log(transactionHash);
-                return transactionHash
-            });
-
         })
-
-
-        // // GET iplist from smart contract
-        // contract.getPastEvents('listIP', {
-        //     fromBlock: 0, 	//meter el bloque donde se despliega el contrato
-        //     toBlock: 'latest'
-        // }, (error, events) => {
-        //     console.log(events);
-        // })
-
-
-        // function updateAccounts(cb = null) {
-        //     this.state.web3.eth
-        //     .getAccounts()
-        //     .then(
-        //         accounts => {
-        //         this.setState(prev => ({
-        //             accounts: [],
-        //             account: prev.account || accounts[0] || ""
-        //         }));
-        //         accounts.forEach(account => {
-        //             this.state.web3.eth.getBalance(account).then(balance => {
-        //             this.setState(prev => ({
-        //                 accounts: [
-        //                 ...prev.accounts,
-        //                 {
-        //                     account: account,
-        //                     balance: balance
-        //                 }
-        //                 ]
-        //             }));
-        //             });
-        //         });
-        //         if (cb) cb();
-        //         }
-        //     )
-        // }
-
-        // updateAccounts();
 
     });
     }

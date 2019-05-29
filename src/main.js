@@ -9,6 +9,10 @@ let swarmHashList;
 let IPList = [];
 let formData;
 let accounts;
+let headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+}
 
 window.addEventListener('load', () => {
     // Set up web3 in...
@@ -85,40 +89,7 @@ window.addEventListener('load', () => {
         console.log('accounts', accounts);
 
         // get smart contract
-        const DappWallABI = [
-            {
-                "constant": false,
-                "inputs": [
-                    {
-                        "name": "_swarmHashList",
-                        "type": "bytes32"
-                    }
-                ],
-                "name": "update",
-                "outputs": [],
-                "payable": true,
-                "stateMutability": "payable",
-                "type": "function"
-            },
-            {
-                "anonymous": false,
-                "inputs": [
-                    {
-                        "indexed": true,
-                        "name": "_from",
-                        "type": "address"
-                    },
-                    {
-                        "indexed": true,
-                        "name": "_swarmHashList",
-                        "type": "bytes32"
-                    }
-                ],
-                "name": "listIP",
-                "type": "event"
-            }
-        ];
-        const DappWallContract = new web3.eth.Contract(DappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
+        const DappWallContract = new web3.eth.Contract(window.dappWallABI, '0x6a826edef7645119bf0f3fea05a480f9bb89fb9a');
 
         // the real thing
         form.addEventListener('submit', async (e) => {
@@ -137,10 +108,7 @@ window.addEventListener('load', () => {
 
                 // GET IP List from Swarm
                 fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
-                    headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                    },
+                    headers: headers,
                     method: "GET",
                 })
                 .then( res => res.text())
@@ -155,52 +123,28 @@ window.addEventListener('load', () => {
                     
                     IPList.push(formData);
                     console.log('This is the current ip list', IPList);
-                })
-                .catch( err => console.log(err));
-        
-                // POST to Swarm with fetch
-                fetch("https://swarm-gateways.net/bzz:/", {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    method: "POST",
-                    body: JSON.stringify(formData)
-                })
-                .then(res => res.text())
-                .then(data => {
-                    console.log('Swarm hash after post', data);
-                    swarmHash = data;
-        
+                    
                     // POST IP list to Swarm
                     fetch("https://swarm-gateways.net/bzz:/", {
-                        headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                        },
+                        headers: headers,
                         method: "POST",
                         body: JSON.stringify(IPList)
                     })
                     .then( res => res.text())
                     .then( data => {
-                        console.log('Swarm hash for the IP list AFTER POST', data);
+                        console.log('new swarmHashList', data);
         
                         swarmHashList = data;
         
                         // POST SwarmHashList to smart DappWallContract
                         DappWallContract.methods.update('0x' + swarmHashList).send({from: accounts[0]}, (error, transactionHash) => {
-                            console.log(transactionHash);
-                            return transactionHash
+                            console.log('tx hash from smart contract', transactionHash);
                         });
         
                         // This is ONLY FOR CHECKING PURPOSES
                         // GET from Swarm with fetch
-                        // http://swarm.protocol-bt.ml/bzz:/
                         fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
-                            headers: {
-                            'Accept': 'application/json',
-                            'Content-Type': 'application/json'
-                            },
+                            headers: headers,
                             method: "GET",
                         })
                         .then( res => res.text())
@@ -210,10 +154,12 @@ window.addEventListener('load', () => {
                         .catch( err => console.log(err));
         
                     })
-                    .catch( err => console.log(err));
-        
                 })
+                .catch( err => console.log(err));
+ 
             })
         });
+
+  
     }
 })

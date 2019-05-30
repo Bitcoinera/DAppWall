@@ -36,6 +36,7 @@ window.addEventListener('load', () => {
             console.log('Your account is locked');
         }
 
+        console.log('web3 version', web3.version.network);
         switch (web3.version.network) {
             case '1':
                 console.log('This is mainnet');
@@ -72,7 +73,6 @@ window.addEventListener('load', () => {
                  accounts = result;
              }       
          });
-         console.log('accounts', accounts);
 
         const DappWallABI = [
             {

@@ -12,11 +12,12 @@
     <div class="container">
         <h1>DAppWall</h1>
         <form id="ip-form" method="POST">
-            <label for="id">ID: </label>
-            <input id="id" name="id" type="text" placeholder="Enter an ID">
-            </br>
-            <label for="ip">IP: </label>
-            <input id="ip" name="ip" type="text" placeholder="Enter an IP">
+            <!-- <label for="id">ID: </label></br>
+            <input id="id" name="id" type="text" placeholder="Enter an ID"></br> -->
+            <label for="ip">Enter a valid IP range (example: 255.255.255.255/55): </label></br>
+            <input id="ip" name="ip" type="text" placeholder="Enter an IP"></br>
+            <label for="label">Enter a valid IP label (hint: it begins with 'SBL' followed by six digits): </label></br>
+            <input id="label" name="label" type="text" placeholder="Enter a IP label">
             <button type="submit">Go</button>
         </form>
     </div>

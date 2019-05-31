@@ -4,7 +4,6 @@ let form = document.getElementById('ip-form');
 let ip = document.getElementById('ip');
 let label = document.getElementById('label');
 let ipRegExp = /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)(\/)(\d{2})$/;
-let labelRegExp = /^SBL(\d{6})$/;
 let contractEvents;
 let swarmHash;
 let swarmHashList;
@@ -30,15 +29,13 @@ window.addEventListener('load', () => {
             let warnings = document.querySelectorAll('.warning');
             // retrieve red from input
             ip.style.borderColor = '';
-            label.style.borderColor = '';
             if ( warnings.length > 0 ) {
                 warnings.forEach( w => w.remove() );
             }
 
             let ipForm = ip.value;
-            let labelForm = label.value;
             // validate input is a ipv4 address
-            if ( ipForm.match(ipRegExp) && labelForm.match(labelRegExp) ) {
+            if ( ipForm.match(ipRegExp) ) {
 
                 // First of all, call smart contract and get the current IP list from Swarm
                 DappWallContract.getPastEvents('listIP', {
@@ -52,6 +49,7 @@ window.addEventListener('load', () => {
                     console.log('current swarmHashList is', swarmHashList);
 
                     // GET IP List from Swarm
+                    // 3f6399cf98aa43e82ac27a411d6db0aab7ab677e347f1b23a0b8112cde9e6eac
                     fetch(`https://swarm-gateways.net/bzz:/${swarmHashList}`, {
                         headers: headers,
                         method: 'GET',
@@ -115,16 +113,8 @@ window.addEventListener('load', () => {
                 let warningMessage = document.createElement('span');
                 warningMessage.className = 'warning';
                 warningMessage.style.color = 'red';
-
-                // check whether the ip range or label was incorrectly entered
-                if (!ipForm.match(ipRegExp)) {
-                    ip.style['border-color'] = 'red';
-                    warningMessage.innerHTML = 'Please, enter a correct IP range';
-                } else {
-                    label.style['border-color'] = 'red';
-                    warningMessage.innerHTML = 'Please, enter a correct IP label';
-                }
-
+                ip.style['border-color'] = 'red';
+                warningMessage.innerHTML = 'Please, enter a correct IP range';
                 document.body.appendChild(warningMessage);
             }
 

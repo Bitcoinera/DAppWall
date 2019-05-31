@@ -16,13 +16,12 @@ app.get('/', (req, res) => {
 
 app.post('/', (req, res) => {
     let IPList = req.body;
-    IPList = IPList.map( ip => ip.ip + ' ; ' + ip.label);
     console.log(IPList);
 
     // create iptables for DAppWall. Right now all ips are treated as malicious and banned.
     let iptablesContent = `#!/bin/sh\n### first flush all the iptables Rules\niptables -F\n\n`;
     for ( let i = 0; i < IPList.length; i++ ) {
-        iptablesContent = iptablesContent + `iptables -A INPUT -s ${IPList[i]} -j DROP\n`
+        iptablesContent = iptablesContent + `iptables -A INPUT -s ${IPList[i].ip} -j ${IPList[i].label}\n`
     }
 
     // fs.writeFile('ips_list', JSON.stringify(IPList), (data) => {})
